@@ -1,0 +1,26 @@
+{% load static %}
+<!-- library_detail.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>library Detail </title>
+</head>
+<body>
+    {% Block content %}
+        <h1> Library: {{ library.name}} </h1>
+        <h2> Books in Library:</h2>
+
+        <ul>
+            {% for book in library.books.all %}
+            <li>{{ book.title }} by {{ book.author.name }} (Published {{ book.publication_year }})</li>
+            {% endfor %}
+        </ul>
+
+
+    {% endblock %}
+    
+</body>
+</html>

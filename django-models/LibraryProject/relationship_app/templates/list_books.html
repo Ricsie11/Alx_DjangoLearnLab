@@ -1,0 +1,29 @@
+{% load static %}
+<!-- list_book.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List of Books</title>
+
+    {% block content %}
+    <h2> Book Available:</h2>
+    <ul>
+        {% for book in books %}
+            <li> {{ book.title }} by {{ book.author.name }} </li>
+
+        {% endfor %}
+    </ul>
+    {% endblock %}
+
+
+
+
+
+
+</head>
+<body>
+    
+</body>
+</html>
