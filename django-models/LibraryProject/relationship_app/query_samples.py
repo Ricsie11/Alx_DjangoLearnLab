@@ -2,7 +2,7 @@
 books = Book.objects.filter(author=author)
 
 #List all books in a library.
-books = library.objects.all()
+books = library.books.all()
 
 #Retrieve the librarian for a library.
 librarian = library.librarian
