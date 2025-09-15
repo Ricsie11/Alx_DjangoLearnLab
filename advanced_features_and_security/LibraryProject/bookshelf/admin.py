@@ -22,6 +22,7 @@ class CustomUserAdmin(UserAdmin):
         (None, {"fields":("date_of_birth", "profile_photo")}),
     )
 
-admin.site.register(Book, CustomUser, CustomUserAdmin)
+admin.site.register(CustomUser, CustomUserAdmin)
 
 
+admin.site.register(Book)
