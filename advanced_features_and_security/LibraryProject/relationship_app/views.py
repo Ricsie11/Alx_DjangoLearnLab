@@ -6,7 +6,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.decorators import permission_required
-from . import BookForm  # Make sure you have a BookForm for create/edit
+from .forms import BookForm  # Make sure you have a BookForm for create/edit
 
 
 # Function-based view to list all books
