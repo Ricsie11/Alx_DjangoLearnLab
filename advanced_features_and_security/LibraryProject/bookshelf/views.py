@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.auth.decorators import permission_required
+from .forms import SearchForm
+from .models import Book
 
 # Create your views here.
 
@@ -10,3 +12,13 @@ from django.contrib.auth.decorators import permission_required
 
 def book_list(request):
     return HttpResponse ("You are allowed to edit, delete and create Books")
+
+
+def search_view(request):
+    form = SearchForm(request.GET)
+    results = []
+    if form.is_valid():
+        query = form.cleaned_data['query']
+        results = Book.objects.filter(name__icontains=query)
+    return render(request, 'search.html', {'form': form, 'results': results})
+

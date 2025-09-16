@@ -1,5 +1,7 @@
 asgiref==3.9.1
 Django==5.2.5
+django-csp==4.0
+packaging==25.0
 pillow==11.3.0
 sqlparse==0.5.3
 tzdata==2025.2
