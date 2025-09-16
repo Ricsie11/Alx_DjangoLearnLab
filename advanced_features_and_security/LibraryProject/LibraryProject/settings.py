@@ -40,9 +40,17 @@ SECURE_CONTENT_TYPE_NOSNIFF = True
 CSRF_COOKIE_SECURE =True
 SESSION_COOKIE_SECURE = True
 
-# Optional but recommended
+#Automatically redirects all HTTP requests to HTTPS.
 SECURE_SSL_REDIRECT = True
 
+#Instruct browsers to only use HTTPS for your site for the specified duration (1 year).
+SECURE_HSTS_SECONDS = 31536000 
+
+#Prevents attackers from exploiting insecure subdomains (like blog.yoursite.com) to bypass HTTPS.
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+
+#Allows your site to be included in browsers’ built-in HSTS preload lists.
+SECURE_HSTS_PRELOAD = True
 
 
 
