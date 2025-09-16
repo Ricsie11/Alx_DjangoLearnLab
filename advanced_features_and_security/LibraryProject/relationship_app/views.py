@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import permission_required
 from .forms import BookForm  # Make sure you have a BookForm for create/edit
 
 
+
 # Function-based view to list all books
 def list_books(request):
     books = Book.objects.all()
@@ -127,3 +128,4 @@ def delete_book(request, book_id):
         book.delete()
         return redirect("book_list")
     return render(request, "relationship_app/delete_book.html", {"book": book})
+

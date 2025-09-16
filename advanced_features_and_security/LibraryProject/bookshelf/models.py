@@ -8,6 +8,16 @@ class Book(models.Model):
     publication_year = models.IntegerField()
 
 
+
+    class meta:
+        permissions = [
+            ("can_view", "can view"),
+            ("can_create", "can create"),    # I created permissions for the Book class, for view, create, edit and delete
+            ("can_edit", "can edit"),
+            ("can_delete", "can delete"),
+        ]
+
+
 class CustomUserManager(BaseUserManager):
     def create_user (self, email, password=None, **extra_fields):
         if not email:

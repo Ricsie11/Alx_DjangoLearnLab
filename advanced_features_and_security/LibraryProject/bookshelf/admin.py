@@ -14,7 +14,7 @@ class BookAdmin(admin.ModelAdmin):
 
 class CustomUserAdmin(UserAdmin):
     model = CustomUser
-    ordering = ('email',)   # instead of ('username',)
+    ordering = ('email')   # instead of ('username')
 
 
 #extends the default UserAdmin fieldsets
