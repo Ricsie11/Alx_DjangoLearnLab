@@ -8,5 +8,5 @@ from django.contrib.auth.decorators import permission_required
 @permission_required("bookshelf.can_edit", raise_exception=True)    # users who are already logged in and has one of this permissions missing would just get a 403 error message instead of
 @permission_required("bookshelf.can_delete", raise_exception=True)  # of just being taken to the login page
 
-def manage_book(request):
+def book_list(request):
     return HttpResponse ("You are allowed to edit, delete and create Books")
