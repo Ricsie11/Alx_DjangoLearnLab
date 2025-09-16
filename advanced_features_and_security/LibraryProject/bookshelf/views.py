@@ -1,8 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.decorators import permission_required
 from .forms import SearchForm
 from .models import Book
+from.forms import ExampleForm  
+
 
 # Create your views here.
 
@@ -14,11 +16,18 @@ def book_list(request):
     return HttpResponse ("You are allowed to edit, delete and create Books")
 
 
-def search_view(request):
-    form = SearchForm(request.GET)
-    results = []
-    if form.is_valid():
-        query = form.cleaned_data['query']
-        results = Book.objects.filter(name__icontains=query)
-    return render(request, 'search.html', {'form': form, 'results': results})
+def example_view(request):
+    if request.method == 'POST':
+        form = ExampleForm(request.POST)
+        if form.is_valid():
+            # Process the data here
+            name = form.cleaned_data['name']
+            email = form.cleaned_data['email']
+            message = form.cleaned_data['message']
+            # You could save it, send an email, etc.
+            return redirect('success')  # Replace with your success URL
+    else:
+        form = ExampleForm()
+    return render(request, 'example_form.html', {'form': form})
+
 
