@@ -9,7 +9,7 @@ class AuthorSerializer(serializers.ModelSerializer):
 
 
 class BookSerializer(serializers.ModelSerializer): #...Used ModelSerializer for a fine grained CRUD experince
-    author = AuthorSerializer(many=true, read_only=true) #...Nested AuthorSerializer to display author name within the book serializer
+    author = AuthorSerializer(many=True, read_only=True) #...Nested AuthorSerializer to display author name within the book serializer
     class Meta:
         model = Book
         fields = '__all__' #....To list all fields in the Book model 
