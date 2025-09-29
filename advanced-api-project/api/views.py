@@ -52,7 +52,7 @@ class BookListView(ListAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
     filter_backends = [
         DjangoFilterBackend,
-        filers.OrderingFilter,
+        filters.OrderingFilter,
         filters.SearchFilter,
     ]
     search_fields = ['^name']
