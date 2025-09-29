@@ -55,7 +55,11 @@ class BookListView(ListAPIView):
         filters.OrderingFilter,
         filters.SearchFilter,
     ]
-    search_fields = ['^name']
+    search_fields = [
+        '^title',
+        '^author',
+        'publication_year',
+    ]
 
 class BookCreateView(CreateAPIView):
     queryset = Book.objects.all()
