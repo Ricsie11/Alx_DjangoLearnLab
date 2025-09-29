@@ -35,7 +35,7 @@ class AuthorUpdateView(UpdateAPIView):  #...To Update an Author
     def perform_update(self, serializer):
         serializer.save()  #..This ensures data is validated before submitted
 
-class AuthorDestroyView(DestroyAPIView):
+class AuthorDeleteView(DestroyAPIView):
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
     permission_classes = [IsAuthenticated]
@@ -71,7 +71,7 @@ class BookUpdateView(UpdateAPIView):
     def perform_update(self, serializer):
         serializer.save()  #..This ensures data is validated before submitted
 
-class BookDestroyView(DestroyAPIView):
+class BookDeleteView(DestroyAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     permission_classes = [IsAuthenticated]
