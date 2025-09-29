@@ -50,7 +50,11 @@ class BookListView(ListAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
-    filter_backends = [DjangoFilterBackend, OrderingFilter, SearchFilter]
+    filter_backends = [
+        DjangoFilterBackend,
+        filers.OrderingFilter,
+        filters.SearchFilter,
+    ]
     search_fields = ['^name']
 
 class BookCreateView(CreateAPIView):
