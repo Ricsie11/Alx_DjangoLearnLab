@@ -7,7 +7,7 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 from .permissions import IsStaffOrReadOnly
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics
-from django+filters import rest_framework
+from django_filters import rest_framework
 
 # Create your views here.
 class AuthorListView(ListAPIView):  #...To List all Authors 
