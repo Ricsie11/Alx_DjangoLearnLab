@@ -1,0 +1,15 @@
+asgiref==3.9.2
+certifi==2025.8.3
+distlib==0.4.0
+Django==5.2.6
+django-filter==25.1
+djangorestframework==3.16.1
+filelock==3.19.1
+mysqlclient==2.2.7
+packaging==25.0
+pipenv==2025.0.4
+platformdirs==4.4.0
+setuptools==80.9.0
+sqlparse==0.5.3
+tzdata==2025.2
+virtualenv==20.34.0
