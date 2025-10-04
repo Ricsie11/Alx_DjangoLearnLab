@@ -8,8 +8,7 @@ from django.contrib.auth.views import PasswordResetView
 from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .models import Post, Comment
-from django.views import View
-from haystack.query import SearchQuerySet
+from django.db.models import Q
 from taggit.models import Tag
 
 
@@ -154,16 +153,19 @@ class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     
 
 # --- Search Function view ---
-class SearchView(View):
-    def get(self, request):
-        query = request.GET.get('q')
+class SearchPostListView(ListView):
+    model = Post
+    template_name = 'blog/post_list.html'
+
+    def get_queryset(self):
+        query = self.request.GET.get('q')
         if query:
-            sqs = SearchQuerySet().autocomplete(text=query)
-            posts = [result.object for result in sqs]
-        else:
-            posts = []
-        return render(request, 'search_results.html', {'posts': posts})
-    
+            return Post.objects.filter(
+                Q(title__icontains=query) |
+                Q(tags__name__icontains=query) |
+                Q(content__icontains=query)
+            )
+        return Post.objects.all()
 
 # --- Tag Function ---
 def tagged_posts(request, slug):
