@@ -1,3 +1,4 @@
+
 {% extends 'base.html' %}
 
 {% block content %}
@@ -9,4 +10,27 @@
     <a href="{% url 'post_update' post.pk %}">Update post</a>
     <a href="{% url 'post_delete' post.pk %}">Delete post</a>
   </p>
+
+  <h2>Comments:</h2>
+  <ul>
+    {% for comment in post.comments.all %}
+      <li>
+        <p>{{ comment.content }}</p>
+        <p>Author: {{ comment.author.username }}</p>
+        <p>Created at: {{ comment.created_at }}</p>
+        {% if user == comment.author %}
+          <a href="{% url 'comment_update' comment.pk %}">Update</a>
+          <a href="{% url 'comment_delete' comment.pk %}">Delete</a>
+        {% endif %}
+      </li>
+    {% empty %}
+      <p>No comments yet.</p>
+    {% endfor %}
+  </ul>
+
+  <form method="post" action="{% url 'comment_create' post.pk %}">
+    {% csrf_token %}
+    {{ comment_form.as_p }}
+    <button type="submit">Post Comment</button>
+  </form>
 {% endblock %}

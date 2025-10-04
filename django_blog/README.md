@@ -1,4 +1,4 @@
-Authentication System Documentation
+# Authentication System Documentation
 
 Overview:
 
@@ -73,3 +73,21 @@ The application uses secure session management practices to prevent session hija
 
 3. CSRF Protection
 The application uses CSRF protection to prevent cross-site request forgery attacks.
+
+
+# Comment System
+Functionality
+- Add comments to blog posts
+- Edit own comments
+- Delete own comments
+- Superusers/staff can edit/delete any comment
+
+Permissions
+- Only logged-in users can comment
+- Users can only edit/delete their own comments
+- Superusers/staff can edit/delete any comment
+
+API Endpoints
+- POST /posts/<int:post_id>/comments/new/: Create comment
+- GET/POST /comments/<int:pk>/edit/: Edit comment
+- GET/POST /comments/<int:pk>/delete/: Delete comment
