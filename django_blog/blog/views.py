@@ -8,6 +8,9 @@ from django.contrib.auth.views import PasswordResetView
 from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .models import Post, Comment
+from django.views import View
+from haystack.query import SearchQuerySet
+from taggit.models import Tag
 
 
 def register(request):
@@ -66,7 +69,7 @@ class PostDetailView(DetailView):
 # --- PostCreateView ---
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
-    fields = ['title', 'content']
+    fields = ['title', 'content', 'tags']
     template_name = 'post_form.html'
 
     def form_valid(self, form):
@@ -77,7 +80,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 # --- PostUpdateView ---
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
-    fields = ['title', 'content']
+    fields = ['title', 'content', 'tags']
     template_name = 'post_form.html'
 
     def form_valid(self, form):
@@ -148,3 +151,22 @@ class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def get_success_url(self):
         post_id = self.object.post.pk
         return reverse('post_detail', kwargs={'pk': post_id})
+    
+
+# --- Search Function view ---
+class SearchView(View):
+    def get(self, request):
+        query = request.GET.get('q')
+        if query:
+            sqs = SearchQuerySet().autocomplete(text=query)
+            posts = [result.object for result in sqs]
+        else:
+            posts = []
+        return render(request, 'search_results.html', {'posts': posts})
+    
+
+# --- Tag Function ---
+def tagged_posts(request, slug):
+    tag = Tag.objects.get(slug=slug)
+    posts = Post.objects.filter(tags__slug=tag.slug)
+    return render(request, 'tagged_posts.html', {'posts': posts, 'tag': tag})

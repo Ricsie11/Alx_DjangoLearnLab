@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
+from taggit.managers import TaggableManager
+from haystack import indexes
 
 # Create your models here.
 class Post(models.Model):
@@ -8,7 +10,7 @@ class Post(models.Model):
     content = models.TextField()
     published_date = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE) 
-
+    tags = TaggableManager()
 
     def __str__(self):
         return self.title
@@ -39,3 +41,13 @@ class CustomUser(AbstractUser):
         verbose_name_plural = 'Users'
 
 
+class PostIndex(indexes.SearchIndex, indexes.Indexable):
+    text = indexes.CharField(document=True, use_template=True)
+    title = indexes.CharField(model_attr='title')
+    content = indexes.CharField(model_attr='content')
+
+    def get_model(self):
+        return Post
+
+    def index_queryset(self, using=None):
+        return self.get_model().objects.all()

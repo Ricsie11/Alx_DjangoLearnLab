@@ -1,7 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm, PasswordResetForm
 from django.contrib.auth.models import User
 from django import forms
-from .models import CustomUser, Post, Comments
+from .models import CustomUser, Post, Comment
 
 class RegistrationForm(UserCreationForm):
     class Meta:
@@ -23,12 +23,12 @@ class CustomPasswordResetForm(PasswordResetForm):
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ['title', 'content']
+        fields = ['title', 'content', 'tags']
 
 
 class CommentForm(forms.ModelForm):
     class Meta:
-        model = Comments
+        model = Comment
         fields = ['content']
         widgets = {
         'content': forms.Textarea(attrs={'rows': 3, 'cols': 50})

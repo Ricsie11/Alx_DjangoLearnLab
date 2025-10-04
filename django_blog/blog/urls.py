@@ -3,6 +3,7 @@ from .views import register, profile, edit_profile, CustomPasswordResetView
 from django.contrib.auth import views as auth_views
 from .views import PostListView, PostDetailView, PostCreateView, PostUpdateView, PostDeleteView
 from .views import CommentUpdateView, CommentDeleteView, CommentCreateView
+from . import views
 
 urlpatterns = [
     path('register/', register, name="register"),
@@ -25,4 +26,6 @@ urlpatterns = [
     path('post/<int:pk>/comments/new/', CommentCreateView.as_view(), name='comment_create'),
     path('comment/<int:pk>/update/', CommentUpdateView.as_view(), name='comment_update'),
     path('comment/<int:pk>/delete/', CommentDeleteView.as_view(), name='comment_delete'),
+    path('search/', views.SearchView, name='search_post'),
+    path('tag/<slug:slug>/', views.tagged_posts, name='tagged_posts'),
 ]
