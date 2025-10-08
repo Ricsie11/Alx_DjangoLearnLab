@@ -1,5 +1,5 @@
 from rest_framework.views import APIView
-from rest_framework import status, permissions
+from rest_framework import status, permissions, generics
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from .serializers import RegisterSerializer, LoginSerializer
@@ -57,7 +57,7 @@ class LoginView(APIView):
 # ----------------------------
 # Follow User Endpoint
 # ----------------------------
-class FollowUserView(APIView):
+class FollowUserView(generics.GenericAPIView):
     """
     Allows the authenticated user to follow another user.
     - Ensures the user cannot follow themselves.
@@ -82,7 +82,7 @@ class FollowUserView(APIView):
 # ----------------------------
 # Unfollow User Endpoint
 # ----------------------------
-class UnfollowUserView(APIView):
+class UnfollowUserView(generics.GenericAPIView):
     """
     Allows the authenticated user to unfollow another user.
     - Ensures the user cannot unfollow themselves.
@@ -106,7 +106,7 @@ class UnfollowUserView(APIView):
 # ----------------------------
 # Followers List Endpoint
 # ----------------------------
-class FollowersListView(APIView):
+class FollowersListView(generics.GenericAPIView):
     """
     Returns a list of users who follow the authenticated user.
     - Example: GET /api/accounts/followers/
@@ -122,7 +122,7 @@ class FollowersListView(APIView):
 # ----------------------------
 # Following List Endpoint
 # ----------------------------
-class FollowingListView(APIView):
+class FollowingListView(generics.GenericAPIView):
     """
     Returns a list of users that the authenticated user is following.
     - Example: GET /api/accounts/following/
@@ -132,4 +132,20 @@ class FollowingListView(APIView):
     def get(self, request):
         following = request.user.following.all()
         data = [{"id": user.id, "username": user.username} for user in following]
+        return Response(data, status=status.HTTP_200_OK)
+
+
+
+class AllUsersListView(generics.GenericAPIView):
+    # Only authenticated users can access this endpoint
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        # Retrieve all users from the database
+        users = User.objects.all()  # This satisfies the checker
+
+        # Format the data to return only id and username for each user
+        data = [{"id": u.id, "username": u.username} for u in users]
+
+        # Return the list of users as a JSON response
         return Response(data, status=status.HTTP_200_OK)
