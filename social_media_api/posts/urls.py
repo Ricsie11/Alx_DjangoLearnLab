@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import PostViewSet, CommentViewSet, FeedView
+from .views import PostViewSet, CommentViewSet, FeedView, LikeViewSet
 
 # Create a router to automatically generate routes for our ViewSets
 router = DefaultRouter()
@@ -22,4 +22,8 @@ urlpatterns = [
     # Custom route for the user's personalized feed
     # GET /feed/  -> returns posts from users the authenticated user follows
     path('feed/', FeedView.as_view(), name='user-feed'),
+
+     # Like system routes
+    path('posts/<int:post_id>/like/', LikeViewSet.as_view({'post': 'create'}), name='like-post'),
+    path('posts/<int:post_id>/unlike/', LikeViewSet.as_view({'delete': 'destroy'}), name='unlike-post'),
 ]
