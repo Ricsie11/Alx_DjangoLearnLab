@@ -64,55 +64,55 @@ class FeedView(APIView):
 # Like and Unlike functionality with Notifications
 # ----------------------------
 
+from rest_framework import viewsets, permissions, status, generics
+from rest_framework.response import Response
+from .models import Post, Like
+from .serializers import LikeSerializer
+from notifications.models import Notification
+
 class LikeViewSet(viewsets.ViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
-    def create(self, request, post_id=None):
-        """Handle liking a post"""
-        try:
-            post = Post.objects.get(id=post_id)
-        except Post.DoesNotExist:
-            return Response({'error': 'Post not found.'}, status=status.HTTP_404_NOT_FOUND)
+    def create(self, request, pk=None):
+        """
+        Handle liking a post.
+        If the post doesn’t exist -> 404.
+        If the like already exists -> return message.
+        Otherwise, create a like and a notification.
+        """
+        post = generics.get_object_or_404(Post, pk=pk)
+        like, created = Like.objects.get_or_create(user=request.user, post=post)
 
-        user = request.user
-
-        # Check if user already liked the post
-        if Like.objects.filter(post=post, user=user).exists():
-            return Response({'detail': 'You have already liked this post.'}, status=status.HTTP_400_BAD_REQUEST)
-
-        # Create the like
-        Like.objects.create(post=post, user=user)
+        if not created:
+            return Response({'detail': 'You already liked this post.'}, status=status.HTTP_400_BAD_REQUEST)
 
         # Create a notification for the post author
-        if post.author != user:
-            Notification.objects.create(recipient=post.author, actor=user, verb='liked your post', target=post)
+        if post.author != request.user:
+            Notification.objects.create(
+                recipient=post.author,
+                actor=request.user,
+                verb='liked your post',
+                target=post
+            )
+
         return Response({'detail': 'Post liked successfully.'}, status=status.HTTP_201_CREATED)
-    
 
-    def destroy(self, request, post_id=None):
-        """Handle unliking a post and remove related notification"""
-        try:
-            post = Post.objects.get(id=post_id)
-        except Post.DoesNotExist:
-            return Response({'error': 'Post not found.'}, status=status.HTTP_404_NOT_FOUND)
-
-        user = request.user
-        like = Like.objects.filter(post=post, user=user).first()
+    def destroy(self, request, pk=None):
+        """
+        Handle unliking a post.
+        """
+        post = generics.get_object_or_404(Post, pk=pk)
+        like = Like.objects.filter(user=request.user, post=post).first()
 
         if not like:
             return Response({'detail': 'You have not liked this post.'}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Delete the like
         like.delete()
-
-        # Delete the related notification (if any)
-        from notifications.models import Notification
         Notification.objects.filter(
             recipient=post.author,
-            actor=user,
+            actor=request.user,
             verb='liked your post',
             target_object_id=post.id
         ).delete()
 
-        return Response({'detail': 'Post unliked and notification removed successfully.'}, status=status.HTTP_200_OK)
-
+        return Response({'detail': 'Post unliked successfully.'}, status=status.HTTP_200_OK)
