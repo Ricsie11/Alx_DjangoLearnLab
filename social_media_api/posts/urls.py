@@ -24,6 +24,6 @@ urlpatterns = [
     path('feed/', FeedView.as_view(), name='user-feed'),
 
      # Like system routes
-    path('posts/<int:post_id>/like/', LikeViewSet.as_view({'post': 'create'}), name='like-post'),
-    path('posts/<int:post_id>/unlike/', LikeViewSet.as_view({'delete': 'destroy'}), name='unlike-post'),
+    path('posts/<int:pk>/like/', LikeViewSet.as_view({'post': 'create'}), name='like-post'),
+    path('posts/<int:pk>/unlike/', LikeViewSet.as_view({'delete': 'destroy'}), name='unlike-post'),
 ]
